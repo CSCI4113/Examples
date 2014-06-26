@@ -1,0 +1,34 @@
+## Services
+Cmnd_Alias SERVICES = /sbin/service, /sbin/chkconfig
+
+## Processes
+Cmnd_Alias PROCESSES = /bin/kill, /usr/bin/kill, /usr/bin/killall
+
+# These are just defaults to increase the security of sudo... so for example
+# sudo will reset all environment variables that might be passed to a
+# process that is executed with it.
+Defaults    requiretty
+Defaults   !visiblepw
+Defaults    always_set_home
+Defaults    env_reset
+Defaults    env_keep =  "COLORS DISPLAY HOSTNAME HISTSIZE INPUTRC KDEDIR LS_COLORS"
+Defaults    env_keep += "MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE"
+Defaults    env_keep += "LC_COLLATE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES"
+Defaults    env_keep += "LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE"
+Defaults    env_keep += "LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY"
+Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin
+
+# These statements grant access to run commands.
+# The first is a simple example that says allow root to
+# run all commands, on all machines, from everywhere.
+root	ALL=(ALL) 	ALL
+
+# This example allows the user dehus to run the network init script
+# with only the restart argument, without having to type in a password.
+# It will also allow dehus to run the shutdown command, but will
+# ask him for a password
+dehus   ALL=NOPASSWD: /etc/init.d/network restart, /sbin/shutdown
+
+# This next one allows anyone in the group admin to run the commands
+# specified in the Command Aliases at the top of this file.
+%admins ALL=PROCESSES, SERVICES
